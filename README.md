@@ -5,6 +5,7 @@
 From this directory, run the following commands to build and containerize the Whisper server:
 
 ```bash
+cd deployment
 bentoml build && bentoml containerize whisper:latest -t whisper:latest
 ```
 

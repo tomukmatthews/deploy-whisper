@@ -1,5 +1,9 @@
 # Load 3 Whisper models on the same GPU, any more and the competition for resources reduces throughput (a g5.xlarge A10)
+api_server:
+ workers: 3
 runners:
  resources:
   nvidia.com/gpu: 1
  workers_per_resource: 3
+ batching:
+  enabled: false

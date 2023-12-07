@@ -98,7 +98,9 @@ class WhisperRunnable(bentoml.Runnable):
         logger.info("Whisper model runner warmed up")
 
 
-whisper_runner = t.cast("RunnerImpl", bentoml.Runner(WhisperRunnable, name="whisper"))
+whisper_runner = t.cast(
+    "RunnerImpl", bentoml.Runner(WhisperRunnable, name="whisper", embedded=True)
+)
 svc = bentoml.Service("whisper", runners=[whisper_runner])
 
 
@@ -116,9 +118,9 @@ def setup_logging(ctx: bentoml.Context):
     input=bentoml.io.NumpyNdarray(dtype=np.float32),
     output=bentoml.io.JSON(pydantic_model=WhisperResults),
 )
-async def transcribe(model_input: npt.NDArray) -> WhisperResults:
+def transcribe(model_input: npt.NDArray) -> WhisperResults:
     t0 = time()
-    result = await whisper_runner.transcribe.async_run(model_input)
+    result = whisper_runner.transcribe.run(model_input)
     t1 = time()
     logger.info(f"API Transcribed in {t1 - t0:.2f} seconds")
     return result
