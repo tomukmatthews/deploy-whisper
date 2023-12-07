@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  whisper:
+    image: whisper:latest
+    # Uncomment the lines to run the container in interactive mode for debugging
+    # command: /bin/bash
+    # tty: true
+    # stdin_open: true
+    command: serve
+    ports:
+      - 3000:3000
+    environment:
+      - BENTOML_CONFIG=/home/bentoml/configuration.yml
+    env_file:
+      - whisper.env
+    volumes:
+      - ./configuration.yml:/home/bentoml/configuration.yml
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]
+              count: 1
